@@ -6,8 +6,9 @@ import {
   getClient,
   normalizeChainId,
 } from '@wagmi/core'
-import type WalletConnectProvider from '@walletconnect/ethereum-provider'
-import type {
+import WalletConnectProvider from '@walletconnect/ethereum-provider'
+import {
+  UniversalProvider,
   UniversalProviderOpts,
   UniversalProvider as UniversalProvider_,
 } from '@walletconnect/universal-provider'
@@ -308,9 +309,7 @@ export class WalletConnectConnector extends Connector<
             {},
           )
         : {}
-      const WalletConnectProvider = (
-        await import('@walletconnect/ethereum-provider')
-      ).default
+
       this.#provider = new WalletConnectProvider({
         ...this.options,
         chainId,
@@ -367,9 +366,7 @@ export class WalletConnectConnector extends Connector<
   }
 
   async #initUniversalProvider() {
-    const WalletConnectProvider = (
-      await import('@walletconnect/universal-provider')
-    ).default
+    const WalletConnectProvider = UniversalProvider
     if (typeof WalletConnectProvider?.init === 'function') {
       this.#provider = await WalletConnectProvider.init(
         this.options as UniversalProviderOpts,
